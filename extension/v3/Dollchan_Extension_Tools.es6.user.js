@@ -900,6 +900,14 @@ const Lng = {
 		'Закрепить превью',
 		'Attach preview',
 		'Закріпити превʼю'],
+  editPost: [
+    'Редактировать',
+    'Edit post',
+    'Редагувати'],
+  deletePost: [
+    'Удалить пост',
+    'Delete post',
+    'Видалити допис'],
 
 	// Windows buttons: tooltips
 	closeWindow: [
@@ -1733,7 +1741,7 @@ const Lng = {
 
 // DOM SEARCH
 
-function $id(id) {
+function $dcid(id) {
 	return doc.getElementById(id);
 }
 
@@ -2753,7 +2761,7 @@ function readPostsData(firstPost, favObj) {
 		maybeSpells.value.endSpells();
 	}
 	if(aib.t && Cfg.panelCounter === 2) {
-		$id('de-panel-info-posts').textContent = Thread.first.postsCount - Thread.first.hiddenCount;
+		$dcid('de-panel-info-posts').textContent = Thread.first.postsCount - Thread.first.hiddenCount;
 	}
 	if(updatedFav) {
 		saveFavorites(favObj);
@@ -3048,14 +3056,14 @@ function initStorageEvent() {
 			if(data.data) {
 				await Spells.setSpells(data.data, false);
 				Cfg.spells = JSON.stringify(data.data);
-				temp = $id('de-spell-txt');
+				temp = $dcid('de-spell-txt');
 				if(temp) {
 					temp.value = Spells.list;
 				}
 			} else {
 				SpellsRunner.unhideAll();
 				await Spells.disableSpells();
-				temp = $id('de-spell-txt');
+				temp = $dcid('de-spell-txt');
 				if(temp) {
 					temp.value = '';
 				}
@@ -3115,12 +3123,12 @@ const Panel = Object.create({
 			</div>
 			${ Cfg.disabled ? '' : '<div id="de-wrapper-popup"></div><hr style="clear: both;">' }
 		</div>`);
-		this._el = $id('de-panel');
+		this._el = $dcid('de-panel');
 		this._el.addEventListener('click', this, true);
 		if(!nav.isMobile) {
 			['mouseover', 'mouseout'].forEach(e => this._el.addEventListener(e, this));
 		}
-		this._buttons = $id('de-panel-buttons');
+		this._buttons = $dcid('de-panel-buttons');
 	},
 	removeMain() {
 		this._el.removeEventListener('click', this, true);
@@ -3130,7 +3138,7 @@ const Panel = Object.create({
 		delete this._postsCountEl;
 		delete this._filesCountEl;
 		delete this._postersCountEl;
-		$id('de-main').remove();
+		$dcid('de-main').remove();
 	},
 	async handleEvent(e) {
 		if('isTrusted' in e && !e.isTrusted) {
@@ -3292,17 +3300,17 @@ const Panel = Object.create({
 	_menu   : null,
 	_menuTO : null,
 	get _filesCountEl() {
-		const value = $id('de-panel-info-files');
+		const value = $dcid('de-panel-info-files');
 		Object.defineProperty(this, '_filesCountEl', { value, configurable: true });
 		return value;
 	},
 	get _postersCountEl() {
-		const value = $id('de-panel-info-posters');
+		const value = $dcid('de-panel-info-posters');
 		Object.defineProperty(this, '_postersCountEl', { value, configurable: true });
 		return value;
 	},
 	get _postsCountEl() {
-		const value = $id('de-panel-info-posts');
+		const value = $dcid('de-panel-info-posts');
 		Object.defineProperty(this, '_postsCountEl', { value, configurable: true });
 		return value;
 	},
@@ -3500,7 +3508,7 @@ class WinResizer {
 
 function toggleWindow(name, isUpdate, data, noAnim) {
 	let el;
-	let winEl = $id('de-win-' + name);
+	let winEl = $dcid('de-win-' + name);
 	const isActive = winEl?.classList.contains('de-win-active');
 	if(isUpdate && !isActive) {
 		return;
@@ -3510,7 +3518,7 @@ function toggleWindow(name, isUpdate, data, noAnim) {
 			`de-win" style="${ Cfg[name + 'WinX'] }; ${ Cfg[name + 'WinY'] }` :
 			'de-win-fixed" style="right: 0; bottom: 25px'
 		) + (name !== 'fav' ? '' : `; width: ${ Cfg.favWinWidth }px; `);
-		winEl = $aBegin($id('de-main'), `<div id="de-win-${ name }" class="${ winAttr }; display: none;">
+		winEl = $aBegin($dcid('de-main'), `<div id="de-win-${ name }" class="${ winAttr }; display: none;">
 			<div class="de-win-head">
 				<span class="de-win-title">
 					${ name === 'cfg' ? 'Dollchan Extension Tools' : Lng.panelBtn[name][lang] }
@@ -3596,12 +3604,12 @@ function showWindow(winEl, winBody, name, isRemove, data, isAnim) {
 		winEl.classList.remove('de-win-close');
 		$hide(winEl);
 		if(!Cfg.expandPanel && !$q('.de-win-active')) {
-			$hide($id('de-panel-buttons'));
+			$hide($dcid('de-panel-buttons'));
 		}
 		return;
 	}
 	if(!Cfg.expandPanel) {
-		$show($id('de-panel-buttons'));
+		$show($dcid('de-panel-buttons'));
 	}
 	switch(name) {
 	case 'fav':
@@ -4198,8 +4206,8 @@ function showFavoritesWindow(winBody, favObj) {
 					}
 				}
 				const isShowDelBtns = !!$q('.de-entry > .de-fav-del-btn[de-checked]', winBody);
-				$toggle($id('de-fav-buttons'), !isShowDelBtns);
-				$toggle($id('de-fav-del-confirm'), isShowDelBtns);
+				$toggle($dcid('de-fav-buttons'), !isShowDelBtns);
+				$toggle($dcid('de-fav-del-confirm'), isShowDelBtns);
 				break;
 			}
 			case 'de-abtn de-fav-header-btn': {
@@ -4401,7 +4409,7 @@ const CfgWindow = {
 					--><div class="de-list"><a id="de-export-file" href="#">${ Lng.dataToFile[lang] }:<!--
 					--><div class="de-depend">${ list }</div></div>`);
 				// Import data from a file to the storage
-				$id('de-import-file').onchange = e => {
+				$dcid('de-import-file').onchange = e => {
 					const file = e.target.files[0];
 					if(!file) {
 						return;
@@ -4450,7 +4458,7 @@ const CfgWindow = {
 
 				// Export data from a storage to the file. The file will be named by date and type of storage.
 				// For example, like "DE_20160727_1540_Cfg+Fav+domain.com(Hid+You).json".
-				const expFile = $id('de-export-file');
+				const expFile = $dcid('de-export-file');
 				const els = $Q('input', expFile.nextElementSibling);
 				els[0].checked = true;
 				expFile.addEventListener('click', async e => {
@@ -4735,7 +4743,7 @@ const CfgWindow = {
 				break;
 			case 'de-cfg-button-keys':
 				e.preventDefault();
-				if($id('de-popup-edit-hotkeys')) {
+				if($dcid('de-popup-edit-hotkeys')) {
 					return;
 				}
 				Promise.resolve(HotKeys.readKeys()).then(keys => {
@@ -4862,7 +4870,7 @@ const CfgWindow = {
 					if(!confirm(Lng.clear[lang] + '?')) {
 						return;
 					}
-					$id('de-spell-txt').value = '';
+					$dcid('de-spell-txt').value = '';
 					await Spells.toggle();
 				}
 			}
@@ -4886,9 +4894,9 @@ const CfgWindow = {
 		}
 		el.setAttribute('selected', '');
 		const id = el.getAttribute('info');
-		let newTab = $id('de-cfg-' + id);
+		let newTab = $dcid('de-cfg-' + id);
 		if(!newTab) {
-			newTab = $aEnd($id('de-cfg-bar'),
+			newTab = $aEnd($dcid('de-cfg-bar'),
 				id === 'filters' ? this._getCfgFilters() :
 				id === 'posts' ? this._getCfgPosts() :
 				id === 'images' ? this._getCfgImages() :
@@ -4897,7 +4905,7 @@ const CfgWindow = {
 				id === 'common' ? this._getCfgCommon() :
 				this._getCfgInfo());
 			if(id === 'filters') {
-				this._updateRowMeter($id('de-spell-txt'));
+				this._updateRowMeter($dcid('de-spell-txt'));
 			}
 			if(id === 'common') {
 				// XXX: remove and make insertion in this._getCfgCommon()
@@ -4914,7 +4922,7 @@ const CfgWindow = {
 		}
 		newTab.className = 'de-cfg-body';
 		if(id === 'filters') {
-			$id('de-spell-txt').value = Spells.list;
+			$dcid('de-spell-txt').value = Spells.list;
 		}
 		this._updateDependant();
 
@@ -5234,7 +5242,7 @@ const CfgWindow = {
 =========================================================================================================== */
 
 function closePopup(data) {
-	const el = typeof data === 'string' ? $id('de-popup-' + data) : data;
+	const el = typeof data === 'string' ? $dcid('de-popup-' + data) : data;
 	if(el) {
 		el.closeTimeout = null;
 		if(Cfg.animation) {
@@ -5246,7 +5254,7 @@ function closePopup(data) {
 }
 
 function $popup(id, txt, isWait = false) {
-	let el = $id('de-popup-' + id);
+	let el = $dcid('de-popup-' + id);
 	const html = `<span class="de-popup-btn">${
 		isWait ? '<svg class="de-wait"><use xlink:href="#de-symbol-wait"/></svg>' : '\u2716 '
 	}</span>${ txt.trim() }`;
@@ -5256,7 +5264,7 @@ function $popup(id, txt, isWait = false) {
 			$animate(el, 'de-blink');
 		}
 	} else {
-		el = $bEnd($id('de-wrapper-popup'),
+		el = $bEnd($dcid('de-wrapper-popup'),
 			`<div class="${ aib.cReply } de-popup" id="de-popup-${ id }">${ html }</div>`);
 		el.onclick = e => {
 			let el = nav.fixEventEl(e.target);
@@ -5330,7 +5338,7 @@ class Menu {
 				tags('#all,#exp,#exph,#ihash,#img,#imgn,#name,#num,#op,#sage'.split(','))
 			}</div><div style="display: inline-block;">${
 				tags('#subj,#tlen,#trip,#uid,#vauthor,#video,#wipe,#words,#rep,#outrep'.split(',')) }</div>`,
-			({ textContent: s }) => insertText($id('de-spell-txt'), s +
+			({ textContent: s }) => insertText($dcid('de-spell-txt'), s +
 				(!aib.t || s === '#op' || s === '#rep' || s === '#outrep' ? '' : `[${ aib.b },${ aib.t }]`) +
 				(Spells.needArg[Spells.names.indexOf(s.substr(1))] ? '(' : '')));
 		case 'de-panel-refresh':
@@ -5340,7 +5348,7 @@ class Menu {
 			return new Menu(el, tags($q(aib.qPostImg, DelForm.first.el) ?
 				Lng.selSaveThr[lang] : [Lng.selSaveThr[lang][0]]),
 			el => {
-				if($id('de-popup-savethr')) {
+				if($dcid('de-popup-savethr')) {
 					return;
 				}
 				const imgOnly = !!Array.prototype.indexOf.call(el.parentNode.children, el);
@@ -5357,7 +5365,7 @@ class Menu {
 				updater.enableUpdater();
 				updater.toggleAudio(
 					[3e4, 6e4, 12e4, 3e5][Array.prototype.indexOf.call(el.parentNode.children, el)]);
-				$id('de-panel-audio-off').id = 'de-panel-audio-on';
+				$dcid('de-panel-audio-off').id = 'de-panel-audio-on';
 			});
 		}
 	}
@@ -5424,7 +5432,7 @@ class Menu {
 				this.removeMenu();
 				this._clickFn(e.target, e);
 				if(!Cfg.expandPanel && !$q('.de-win-active')) {
-					$hide($id('de-panel-buttons'));
+					$hide($dcid('de-panel-buttons'));
 				}
 			}
 			break;
@@ -5538,7 +5546,7 @@ const HotKeys = {
 			(tag === 'textarea' ||
 				tag === 'input' && (el.type === 'text' || el.type === 'password') ? 0x8000 : 0);
 		if(kc === 0x74 || kc === 0x8074) { // F5
-			if(isThr || $id('de-popup-load-pages')) {
+			if(isThr || $dcid('de-popup-load-pages')) {
 				return;
 			}
 			AttachedImage.closeImg();
@@ -5597,7 +5605,7 @@ const HotKeys = {
 				toggleWindow('hid', false);
 				break;
 			case 8: // Open/close panel
-				$toggle($id('de-panel-buttons'));
+				$toggle($dcid('de-panel-buttons'));
 				break;
 			case 9: // Mask/unmask images
 				toggleCfg('maskImgs').then(() => updateCSS());
@@ -5615,31 +5623,31 @@ const HotKeys = {
 				if(el !== postform.txta) {
 					return;
 				}
-				$id('de-btn-bold').click();
+				$dcid('de-btn-bold').click();
 				break;
 			case 13: // Italic text (txt)
 				if(el !== postform.txta) {
 					return;
 				}
-				$id('de-btn-italic').click();
+				$dcid('de-btn-italic').click();
 				break;
 			case 14: // Strike text (txt)
 				if(el !== postform.txta) {
 					return;
 				}
-				$id('de-btn-strike').click();
+				$dcid('de-btn-strike').click();
 				break;
 			case 15: // Spoiler text (txt)
 				if(el !== postform.txta) {
 					return;
 				}
-				$id('de-btn-spoil').click();
+				$dcid('de-btn-spoil').click();
 				break;
 			case 16: // Code text (txt)
 				if(el !== postform.txta) {
 					return;
 				}
-				$id('de-btn-code').click();
+				$dcid('de-btn-code').click();
 				break;
 			case 17: // Open next page/image
 				if(AttachedImage.viewer) {
@@ -5875,7 +5883,7 @@ class KeyEditListener {
 		el.title = title;
 	}
 	get saveButton() {
-		const value = $id('de-keys-save');
+		const value = $dcid('de-keys-save');
 		Object.defineProperty(this, 'saveButton', { value, configurable: true });
 		return value;
 	}
@@ -6179,7 +6187,7 @@ const ContentLoader = {
 		}
 		$popup('load-files', `${ imgOnly ? Lng.loadImage[lang] : Lng.loadFile[lang] }:<br><progress ` +
 			`id="de-loadprogress" value="0" max="${ count }"></progress> <span>1</span>/${ count }`, true);
-		progress = $id('de-loadprogress');
+		progress = $dcid('de-loadprogress');
 		counter = progress.nextElementSibling;
 		this._thrPool.completeTasks();
 		els = null;
@@ -6581,7 +6589,7 @@ class Videos {
 		}
 		link.videoInfo = m;
 		let vidListEl;
-		if(Panel.isVidEnabled && (vidListEl = $id('de-video-list'))) {
+		if(Panel.isVidEnabled && (vidListEl = $dcid('de-video-list'))) {
 			updateVideoList(vidListEl, link, this.post.num);
 		}
 		if(loader && !dataObj) {
@@ -6620,7 +6628,7 @@ class Videos {
 		Videos.addPlayer(this, m, isYtube);
 	}
 	toggleFloatedThumb(linkEl, isOutEvent) {
-		let el = $id('de-video-thumb-floated');
+		let el = $dcid('de-video-thumb-floated');
 		if(isOutEvent) {
 			el.remove();
 			return;
@@ -7382,7 +7390,7 @@ const Spells = Object.create({
 		return this.reps;
 	},
 	async addSpell(type, arg, isNeg) {
-		const inputEl = $id('de-spell-txt');
+		const inputEl = $dcid('de-spell-txt');
 		const value = inputEl?.value;
 		const checkboxEl = $q('input[info="hideBySpell"]');
 		let spells = value && this.parseText(value);
@@ -7586,7 +7594,7 @@ const Spells = Object.create({
 	},
 	async toggle() {
 		let spells;
-		const inputEl = $id('de-spell-txt');
+		const inputEl = $dcid('de-spell-txt');
 		const { value } = inputEl;
 		if(value && (spells = this.parseText(value))) {
 			closePopup('err-spell');
@@ -8826,7 +8834,7 @@ class PostForm {
 		return this.pForm.getBoundingClientRect().top;
 	}
 	addMarkupPanel() {
-		let el = $id('de-txt-panel');
+		let el = $dcid('de-txt-panel');
 		if(!Cfg.addTextBtns) {
 			aib.removeMarkupButtons(el);
 			return;
@@ -9080,8 +9088,9 @@ class PostForm {
 	_initCaptcha() {
 		const capEl =
 			$q('input[type="text"][name*="aptcha"], *[id*="captcha"], *[class*="captcha"]', this.form);
-		if(!capEl) {
-			this.cap = null;
+		if(!capEl || aib.passCaptcha) {
+
+      this.cap = null;
 			return;
 		}
 		this.cap = new Captcha(capEl, this.tNum);
@@ -9379,7 +9388,7 @@ async function checkSubmit(data) {
 			const dForm = $q(aib.qDelForm, data);
 			if(dForm) {
 				deWindow.location.assign(aib.getThrUrl(aib.b, aib.getTNum(dForm)));
-			}
+      }
 		}
 		return;
 	}
@@ -9530,7 +9539,7 @@ function getUploadFunc() {
 		'<span></span> / <span></span> (<span></span>)</div>', true);
 	let isInited = false;
 	const beginTime = Date.now();
-	const progress = $id('de-uploadprogress');
+	const progress = $dcid('de-uploadprogress');
 	const counterWrap = progress.nextElementSibling;
 	const [counterEl, totalEl, speedEl] = [...counterWrap.children];
 	return ({ total, loaded: i }) => {
@@ -10969,6 +10978,8 @@ class AbstractPost {
 			return;
 		}
 		case 'post-report': aib.reportForm(num, this.thr.num); return;
+    case 'post-edit': aib.editPost(num, this.thr.num); return;
+    case 'post-delete': aib.deletePost(num, this.thr.num); return;
 		case 'thr-exp': {
 			const task = +el.textContent.match(/\d+/);
 			this.thr.loadPosts(!task ? 'all' : task === 10 ? 'more' : task);
@@ -11352,7 +11363,7 @@ class Post extends AbstractPost {
 	}
 	unselect() {
 		if(this.isOp) {
-			$id('de-thr-hid-' + this.num)?.classList.remove('de-selected');
+			$dcid('de-thr-hid-' + this.num)?.classList.remove('de-selected');
 			this.thr.el.classList.remove('de-selected');
 		} else {
 			this.el.classList.remove('de-selected');
@@ -11391,7 +11402,11 @@ class Post extends AbstractPost {
 		(Cfg.markMyPosts || Cfg.markMyLinks ?
 			`<span class="de-menu-item" info="post-markmy">${
 				MyPosts.has(this.num) ? Lng.deleteMyPost[lang] : Lng.markMyPost[lang]
-			}</span>` : '');
+			}</span>` : '') +
+////
+      `<span class="de-menu-item" info="post-edit">${Lng.editPost[lang]}</span>` +
+      `<span class="de-menu-item" info="post-delete">${Lng.deletePost[lang]}</span>`
+      ;
 	}
 	_strikePostNum(isHide) {
 		const { num } = this;
@@ -14467,7 +14482,7 @@ function initThreadUpdater(title, enableUpdate) {
 		disableAudio() {
 			this.stopAudio();
 			this.enabled = false;
-			const btn = $id('de-panel-audio-on');
+			const btn = $dcid('de-panel-audio-on');
 			if(btn) {
 				btn.id = 'de-panel-audio-off';
 			}
@@ -14537,7 +14552,7 @@ function initThreadUpdater(title, enableUpdate) {
 		_countingIV : null,
 		_enabled    : false,
 		get _el() {
-			const value = $id('de-updater-count');
+			const value = $dcid('de-updater-count');
 			Object.defineProperty(this, '_el', { value });
 			return value;
 		},
@@ -15635,7 +15650,7 @@ class BaseBoard {
 		if(isForm) {
 			const newForm = $bBegin(data, str);
 			$hide(data);
-			deWindow.addEventListener('load', () => $id('de-dform-old').remove());
+			deWindow.addEventListener('load', () => $dcid('de-dform-old').remove());
 			return newForm;
 		}
 		data.innerHTML = str;
@@ -15755,7 +15770,7 @@ class BaseBoard {
 		return +$q('input[type="checkbox"]', thr).value;
 	}
 	insertMarkupButtons(postForm, el) {
-		(Cfg.txtBtnsLoc ? $id('de-resizer-text') || postForm.txta : postForm.subm).after(el);
+		(Cfg.txtBtnsLoc ? $dcid('de-resizer-text') || postForm.txta : postForm.subm).after(el);
 	}
 	isAjaxStatusOK(status) {
 		return status === 200 || status === 206;
@@ -15829,7 +15844,7 @@ function getImageBoard(checkDomains, checkEngines) {
 			return super.getImgRealName(wrap);
 		}
 		init() {
-			const el = $id('posttypeindicator');
+			const el = $dcid('posttypeindicator');
 			if(el) {
 				el.previousSibling?.remove();
 				el.nextSibling?.remove();
@@ -16013,8 +16028,8 @@ function getImageBoard(checkDomains, checkEngines) {
 				return true;
 			}
 			$script('highlightReply = Function.prototype;');
-			setTimeout(() => $id('updater')?.remove(), 0);
-			$id('body')?.removeAttribute('id');
+			setTimeout(() => $dcid('updater')?.remove(), 0);
+			$dcid('body')?.removeAttribute('id');
 			return false;
 		}
 	}
@@ -16024,7 +16039,7 @@ function getImageBoard(checkDomains, checkEngines) {
 		constructor(...args) {
 			super(...args);
 
-			this.qDelForm = $id('posts') ? '#posts' : '#delform';
+			this.qDelForm = $dcid('posts') ? '#posts' : '#delform';
 			this.qError = 'body[align=center] div, div[style="margin-top: 50px;"]';
 			this.qPostImg = 'img.thumb, video.thumb';
 			this.qPostMsg = '.message';
@@ -16127,10 +16142,10 @@ function getImageBoard(checkDomains, checkEngines) {
 		fixFileInputs(el) {
 			const str = ' class="de-file-wrap"><input name="files" type="file"></div>';
 			el.innerHTML = '<div' + str +
-				('<div style="display: none;"' + str).repeat((+$id('labelMaxFiles')?.textContent || 3) - 1);
+				('<div style="display: none;"' + str).repeat((+$dcid('labelMaxFiles')?.textContent || 3) - 1);
 		}
 		getCapParent() {
-			return $id('captchaDiv');
+			return $dcid('captchaDiv');
 		}
 		getImgRealName(wrap) {
 			return $q('.originalNameLink', wrap).textContent;
@@ -16172,7 +16187,7 @@ function getImageBoard(checkDomains, checkEngines) {
 					Object.defineProperty(thread, "changeRefresh",
 						{ value: Function.prototype, writable: false, configurable: false });
 				}`);
-			const submEl = $id('formButton');
+			const submEl = $dcid('formButton');
 			if(submEl) {
 				this._hasNewAPI = true;
 				submEl.insertAdjacentHTML('afterend', `<button id="de-postform-submit" type="submit">${
@@ -16608,7 +16623,7 @@ function getImageBoard(checkDomains, checkEngines) {
 			}
 		}
 		init() {
-			if($id('js-posts')) { // New Makaba engine
+			if($dcid('js-posts')) { // New Makaba engine
 				this._isBeta = true;
 				$Q('.thread__missed').forEach(el =>
 					el.innerHTML = el.innerHTML.replace(/ (\d+) постов/, (m, i) => ` ${ i - 1 } постов`));
@@ -16667,14 +16682,14 @@ function getImageBoard(checkDomains, checkEngines) {
 				}
 				el.remove();
 			});
-			const el = $id('shampoo');
+			const el = $dcid('shampoo');
 			if(el) {
 				el.tabIndex = 1;
 			}
 			return false;
 		}
 		insertMarkupButtons(postForm, el) {
-			const formEl = Cfg.txtBtnsLoc ? $id('de-resizer-text') || postForm.txta : postForm.subm;
+			const formEl = Cfg.txtBtnsLoc ? $dcid('de-resizer-text') || postForm.txta : postForm.subm;
 			const posEl = formEl.parentNode;
 			posEl.insertAdjacentHTML('afterend', '<div class="postform__raw"></div>');
 			posEl.nextSibling.appendChild(el);
@@ -16701,6 +16716,151 @@ function getImageBoard(checkDomains, checkEngines) {
 	}
 	ibDomains['2ch.hk'] = ibDomains['2ch.life'] = ibDomains['2ch.org'] = ibDomains['2ch.su'] =
 		ibDomains['dva4.ru'] = Makaba;
+
+  class EscapeChan extends Makaba {
+    fixIdFunc() {
+      unsafeWindow.$id = function(id) {
+        if(id == 'js-posts') {
+            var d = _.q('.cntnt');
+            return d;
+        }
+        return _.id(id);
+      }
+    }
+
+		constructor(...args) {
+			super(...args);
+      this._isBeta = true;
+      this.passCaptcha = true;
+//		  setTimeout(this.fixIdFunc, 1000);
+    }
+
+    captchaAfterSubmit(data) { unsafeWindow.restartCaptcha() }
+
+    captchaInit() {
+			return null;
+		}
+		captchaUpdate() {
+			return null;
+		}
+
+    editPost(num, thread) {
+      var formData = new FormData();
+      var data = {'board': CFG.BOARD.NAME, 'thread': thread, 'post': num};
+      for ( var key in data ) {
+          formData.append(key, data[key]);
+      }
+      $.ajax({
+          method: "POST",
+          url:'/user/edit/check',
+          data: formData,
+          success(data) {
+              if(data.result == 1) {
+      $('#m' + num).html('<form id="edit' + num + '" onsubmit="return false;"><input type="hidden" name="board" value="' + CFG.BOARD.NAME + '"><input type="hidden" name="thread" value="' + thread + '"><input type="hidden" name="post" value="' + num + '"><div><textarea name="comment" id="comment-textarea-' + num + '" style="width:100%;background-color:var(--theme_default_altbtnbg);color:var(--theme_default_inputtext);outline:medium;border-radius:10px;padding:8px 10px;" rows="5">' + data.message + '</textarea></div><div class="postform__mu-wrapper" style="margin:3px 0 5px 0;word-wrap:initial;word-break:initial;"><button class="postform__mu postform__mu_type_b" type="button" onclick="doAddTags(\'[b]\',\'[/b]\',\'comment-textarea-' + num + '\')">B</button><button class="postform__mu postform__mu_type_i" type="button" onclick="doAddTags(\'[i]\',\'[/i]\',\'comment-textarea-' + num + '\')">I</button><button class="postform__mu postform__mu_type_q" type="button" onclick="doAddTags(\'>\',\'\',\'comment-textarea-' + num + '\')">&gt;</button><button class="postform__mu postform__mu_type_u" type="button" onclick="doAddTags(\'[u]\',\'[/u]\',\'comment-textarea-' + num + '\')">U</button><button class="postform__mu postform__mu_type_o" type="button" onclick="doAddTags(\'[o]\',\'[/o]\',\'comment-textarea-' + num + '\')">O</button><button class="postform__mu postform__mu_type_sp" type="button" onclick="doAddTags(\'[spoiler]\',\'[/spoiler]\',\'comment-textarea-' + num + '\')"><span class="spoiler">??</span></button><button class="postform__mu postform__mu_type_s" type="button" onclick="doAddTags(\'[s]\',\'[/s]\',\'comment-textarea-' + num + '\')">S</button><button class="postform__mu" type="button" onclick="doAddTags(\'[sup]\',\'[/sup]\',\'comment-textarea-' + num + '\')">A<sup>a</sup></button><button class="postform__mu" type="button" onclick="doAddTags(\'[sub]\',\'[/sub]\',\'comment-textarea-' + num + '\')">A<sub>a</sub></button><button class="postform__mu" style="width:auto;" type="button" onclick="doAddTags(\'[secret]\',\'[/secret]\',\'comment-textarea-' + num + '\')">Приват</sub></button></div><div><button type="button" class="button button-comment-edit-submit">Сохранить текст поста</button</div></form>');
+      $('#edit' + num).find('.button-comment-edit-submit').on('click', function() {
+        var formData = new FormData(document.getElementById('edit' + num));
+
+            $.ajax({
+                method: "POST",
+                url:'/user/edit',
+                data: formData,
+                success(data) {
+                    if(data.result == 1) {
+						$('#m' + num).html(data.message);
+
+						$('#post-' + num).find('.post__edited').show();
+					} else  if(data.result == 2) {
+						$('#m' + num).html(data.message);
+
+						$('#post-' + num).find('.post__edited_by_mod').show();
+					} else {
+						$alert(data.error.message);
+					}
+                },
+                contentType: false,
+                processData: false
+            })
+      });
+    } else {
+      alert(data.error.message);
+    }
+          },
+          contentType: false,
+          processData: false
+      })
+    }
+
+    deletePost(num, thread) {
+      if(!confirm('Вы уверены, что хотите удалить этот пост?')) return;
+          //var XHR = new XMLHttpRequest();
+          var formData = new FormData();
+          var data = {'board': CFG.BOARD.NAME, 'thread': thread, 'post': num};
+          for ( var key in data ) {
+              formData.append(key, data[key]);
+          }
+
+          $.ajax({
+              method: "POST",
+              url:'/user/delete',
+              data: formData,
+              success(data) {
+                  if(data.result == 1) {
+          $alert('Пост удалён.');
+
+          if(CFG.BOARD.THREADID > 0) {
+            PostF.updatePosts(null);
+          } else {
+            location.reload();
+          }
+        } else {
+          alert(data.error.message);
+        }
+              },
+              contentType: false,
+              processData: false
+          })
+    }
+
+		init() {
+
+      this.fixIdFunc();
+
+			{ // New Makaba engine
+				$Q('.thread__missed').forEach(el =>
+					el.innerHTML = el.innerHTML.replace(/ (\d+) постов/, (m, i) => ` ${ i - 1 } постов`));
+			}
+			$script(`(function() {
+				function fixGlobalFunc(name) {
+					Object.defineProperty(window, name,
+						{ value: Function.prototype, writable: false, configurable: false });
+				}
+////				${ this._isBeta ? '' : 'fixGlobalFunc("autorefresh_start");' }
+				fixGlobalFunc("linkremover");
+////				fixGlobalFunc("Media");
+				window.FormData = void 0;
+			})();`);
+			$Q('.autorefresh').forEach(el => {
+				const inpEl = $q('input', el);
+				if(inpEl.checked) {
+					inpEl.click();
+				}
+			});
+			$Q('.js-update-thread, #postbtn-favorite-bottom').forEach(el => {
+				let node;
+				while((node = el.nextSibling) && node.title !== 'Всего постов в треде') {
+					node.remove();
+				}
+				el.remove();
+			});
+			const el = $dcid('shampoo');
+			if(el) {
+				el.tabIndex = 1;
+			}
+			return false;
+		}
+  }
+  ibDomains['escapechain.ru'] = ibDomains['escapechain.xyz'] = ibDomains['bookchan.ru'] =
+    ibDomains['rolechan.ru'] = EscapeChan;
 
 	class _2channel extends Makaba {
 		constructor(...args) {
@@ -16772,7 +16932,7 @@ function getImageBoard(checkDomains, checkEngines) {
 			if(el) {
 				$q('.freply__files-and-captcha').before(el);
 			}
-			el = $id('postform');
+			el = $dcid('postform');
 			if(el) {
 				el.setAttribute('action', el.getAttribute('action') + '?json=1');
 			}
@@ -16797,8 +16957,8 @@ function getImageBoard(checkDomains, checkEngines) {
 		}
 		captchaUpdate(cap) {
 			return cap.updateHelper('/cgi/captcha?task=get_id', ({ responseText: id }) => {
-				$id('imgcaptcha').src = '/cgi/captcha?task=get_image&id=' + id;
-				$id('captchaid').value = id;
+				$dcid('imgcaptcha').src = '/cgi/captcha?task=get_image&id=' + id;
+				$dcid('captchaid').value = id;
 			});
 		}
 		getSubmitData(json) {
@@ -16809,7 +16969,7 @@ function getImageBoard(checkDomains, checkEngines) {
 		}
 		init() {
 			$script('postFormSubmit = Function.prototype;');
-			$id('postform').insertAdjacentHTML('beforeend', '<input type="hidden" name="json" value="1">');
+			$dcid('postform').insertAdjacentHTML('beforeend', '<input type="hidden" name="json" value="1">');
 			return false;
 		}
 	}
@@ -16911,9 +17071,9 @@ function getImageBoard(checkDomains, checkEngines) {
 		}
 		get captchaUpdate() {
 			let value = null;
-			if($id('captchaFormPart')) {
+			if($dcid('captchaFormPart')) {
 				value = cap => {
-					const containerEl = $id('t-root');
+					const containerEl = $dcid('t-root');
 					if(!containerEl) {
 						cap.hasCaptcha = false;
 						return;
@@ -16922,7 +17082,7 @@ function getImageBoard(checkDomains, checkEngines) {
 					containerEl.remove();
 					$script('initTCaptcha();');
 					setTimeout(() => {
-						cap.textEl = $id('t-resp');
+						cap.textEl = $dcid('t-resp');
 						cap.textEl.tabIndex = 999;
 						cap.initTextEl();
 					}, 1e3);
@@ -17024,7 +17184,7 @@ function getImageBoard(checkDomains, checkEngines) {
 		init() {
 			Cfg.findImgFile = 0;
 			Cfg.txtBtnsLoc = 0;
-			$id('styleSelector')?.setAttribute('onchange', 'setActiveStyleSheet(this.value);');
+			$dcid('styleSelector')?.setAttribute('onchange', 'setActiveStyleSheet(this.value);');
 			return false;
 		}
 	}
@@ -17181,11 +17341,11 @@ function getImageBoard(checkDomains, checkEngines) {
 		get captchaInit() {
 			const switchCaptcha = status => {
 				const hasPasscode = status === 'validpasscode';
-				$toggle($id('captchablock').lastElementChild, !hasPasscode);
-				$toggle($id('validcaptchablock'), hasPasscode);
-				$toggle($id('invalidcaptchablock'), status === 'invalidpasscode');
+				$toggle($dcid('captchablock').lastElementChild, !hasPasscode);
+				$toggle($dcid('validcaptchablock'), hasPasscode);
+				$toggle($dcid('invalidcaptchablock'), status === 'invalidpasscode');
 				if(!hasPasscode) {
-					const captchaInput = $id('captcha');
+					const captchaInput = $dcid('captcha');
 					if(captchaInput) {
 						captchaInput.value = '';
 					}
@@ -17370,7 +17530,7 @@ function getImageBoard(checkDomains, checkEngines) {
 				$popup('err-stormwall', `<div>${ Lng.stormWallCheck[lang] }</div>` +
 					`<iframe id="de-stormwall" name="de-prohibited" src="${
 						url }" width="500" height="500" style="display: none;"></iframe>`);
-				const frEl = $id('de-stormwall');
+				const frEl = $dcid('de-stormwall');
 				frEl.onload = () => {
 					if(loadCounter++ < 1) {
 						return;
@@ -17577,7 +17737,7 @@ function getImageBoard(checkDomains, checkEngines) {
 			return super.init();
 		}
 		sendHTML5Post(form, data, needProgress, hasFiles) {
-			const oekakiEl = $id('wPaint');
+			const oekakiEl = $dcid('wPaint');
 			if(oekakiEl?.hasChildNodes() && oekakiEl.style.display !== 'none') {
 				hasFiles = true;
 				const mime = { type: 'image/png' };
@@ -17674,7 +17834,7 @@ function getImageBoard(checkDomains, checkEngines) {
 			return $q('.mobile_filename_hide', wrap).textContent;
 		}
 		getImgWrap(img) {
-			return $id('fs_' + img.alt);
+			return $dcid('fs_' + img.alt);
 		}
 		getPNum(post) {
 			return +post.getAttribute('data-num');
@@ -17683,7 +17843,7 @@ function getImageBoard(checkDomains, checkEngines) {
 			return { error, postNum: id && +id };
 		}
 		init() {
-			const el = $id('postform');
+			const el = $dcid('postform');
 			if(el) {
 				el.setAttribute('action', el.getAttribute('action') + '?json=1');
 			}
@@ -18768,8 +18928,8 @@ function updateCSS() {
 	${ !aib.formHeaders && (aib.multiFile || Cfg.fileInputs !== 2) ?
 		'#de-pform form > table > tbody > tr > td:not([colspan]):first-child, #de-pform form table > tbody > tr > th:first-child, ' : '' }
 	body > hr, .postarea, .theader { display: none !important; }\r\n`;
-	$id('de-css-dynamic').textContent = (x + aib.css).replace(/[\r\n\t]+/g, '\r\n\t');
-	$id('de-css-user').textContent = Cfg.userCSS ? Cfg.userCSSTxt : '';
+	$dcid('de-css-dynamic').textContent = (x + aib.css).replace(/[\r\n\t]+/g, '\r\n\t');
+	$dcid('de-css-user').textContent = Cfg.userCSS ? Cfg.userCSSTxt : '';
 }
 
 /* eslint-enable max-len */
@@ -18829,8 +18989,10 @@ async function runMain(checkDomains, dataPromise) {
 		return;
 	}
 	let formEl = $q(aib.qDelForm + ', [de-form]');
+
 	if(!formEl) {
-		runFrames();
+    runFrames();
+
 		return;
 	}
 	if(doc.body.classList.contains('de-runned') ||
@@ -18951,6 +19113,7 @@ function initMain() {
 	if(window.name === 'de-prohibited') {
 		return;
 	}
+
 	if(doc.readyState !== 'loading') {
 		needScroll = false;
 		runMain(true, null);
@@ -18970,6 +19133,8 @@ function initMain() {
 		doc.removeEventListener(e.type, wFunc);
 	});
 	doc.addEventListener('DOMContentLoaded', () => runMain(false, dataPromise));
+
+
 }
 
 initMain();
